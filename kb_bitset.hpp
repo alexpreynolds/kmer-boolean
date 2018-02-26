@@ -78,7 +78,7 @@ namespace kmer_boolean
         }
         _k = k;
         _nbytes = 1 << (2*_k - 3);
-        _max_bits = (k > 1) ? 8 : 4;
+        _max_bits = (k > 1) ? CHAR_BIT : fmap.size();
         _nbytes = (_nbytes > 1) ? _nbytes : 1;
         _bitset.reserve(_nbytes);
       } catch (const std::exception& e) {
