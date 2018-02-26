@@ -120,9 +120,9 @@ namespace kmer_boolean
       for (int byte = 0; byte < _nbytes; ++byte) {
         unsigned char bits = _bitset[byte];
 #ifdef DEBUG_FLAG
-	      std::cout << "byte [" << byte << "]  bytes [" << byte_to_binary(bits) << "]" << std::endl;
+        std::cout << "byte [" << byte << "]  bytes [" << byte_to_binary(bits) << "]" << std::endl;
 #endif
-	      for (int bidx = 0; bidx < _max_bits; ++bidx) {
+        for (int bidx = 0; bidx < _max_bits; ++bidx) {
           bool bit = (bits >> bidx) & 1U;
           // print mer
           if (((ft == MerFilterPresent) && bit) || ((ft == MerFilterAbsent) && !bit) || (ft == MerFilterAll)) {
@@ -152,8 +152,8 @@ namespace kmer_boolean
     const char *
     byte_to_binary(const int& byte)
     {
-      static char binary[9];
-      binary[8] = '\0';
+      static char binary[CHAR_BIT + 1];
+      binary[CHAR_BIT] = '\0';
       int z;
       for (z = 128; z > 0; z >>= 1) {
         std::strcat(binary, ((byte & z) == z) ? "1" : "0");
