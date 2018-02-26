@@ -23,10 +23,10 @@ namespace kmer_boolean
       int o = 0;
       int m = idx;
       while (m > 0) {
-	m -= 8;
-	if (m >= 0) {
-	  o++;
-	}
+        m -= 8;
+        if (m >= 0) {
+          o++;
+        }
       }
       return o;
     }
@@ -34,10 +34,10 @@ namespace kmer_boolean
   public:
     typedef enum
       {
-	MerFilterUndefined = 0,
-	MerFilterPresent,
-	MerFilterAbsent,
-	MerFilterAll,
+        MerFilterUndefined = 0,
+        MerFilterPresent,
+        MerFilterAbsent,
+        MerFilterAll,
       } MerFilterType;
     
     std::vector<unsigned char>& bitset() { return _bitset; }
@@ -72,17 +72,17 @@ namespace kmer_boolean
       // or 2^(2k-3) bytes
       //
       try {
-	if (k < 1) {
-	  throw std::domain_error("Error: k must be positive, non-zero integer");
-	}
-	_k = k;
-	_nbytes = 1 << (2*_k - 3);
-	_max_bits = (k > 1) ? 8 : 4;
-	_nbytes = (_nbytes > 1) ? _nbytes : 1;
-	_bitset.reserve(_nbytes);
+        if (k < 1) {
+          throw std::domain_error("Error: k must be positive, non-zero integer");
+        }
+        _k = k;
+        _nbytes = 1 << (2*_k - 3);
+        _max_bits = (k > 1) ? 8 : 4;
+        _nbytes = (_nbytes > 1) ? _nbytes : 1;
+        _bitset.reserve(_nbytes);
       } catch (const std::exception& e) {
-	std::cout << e.what() << std::endl;
-	std::terminate();
+        std::cout << e.what() << std::endl;
+        std::terminate();
       }
     }
 
@@ -90,7 +90,7 @@ namespace kmer_boolean
     set_all(const bool b) 
     {
       for (int bidx = 0; bidx < _nbytes; ++bidx) {
-	_bitset[bidx] = (b) ? 0xff : 0x00; 
+        _bitset[bidx] = (b) ? 0xff : 0x00; 
       } 
     }
 
@@ -117,34 +117,34 @@ namespace kmer_boolean
       std::vector<size_t> mer_inc(_k, 0);
 
       for (int byte = 0; byte < _nbytes; ++byte) {
-	unsigned char bits = _bitset[byte];
+        unsigned char bits = _bitset[byte];
 #ifdef DEBUG_FLAG
-	std::cout << "byte [" << byte << "]  bytes [" << byte_to_binary(bits) << "]" << std::endl;
+	      std::cout << "byte [" << byte << "]  bytes [" << byte_to_binary(bits) << "]" << std::endl;
 #endif
-	for (int bidx = 0; bidx < _max_bits; ++bidx) {
-	  bool bit = (bits >> bidx) & 1U;
-	  // print mer
-	  if (((ft == MerFilterPresent) && bit) || ((ft == MerFilterAbsent) && !bit) || (ft == MerFilterAll)) {
-	    for (std::vector<size_t>::const_reverse_iterator inc = mer_inc.rbegin(); inc != mer_inc.rend(); ++inc) {
-	      std::cout << rmap[*inc];
-	    }
-	    if (((ft == MerFilterPresent) || (ft == MerFilterAll)) && bit) {
-	      std::cout << " found" << std::endl;
-	    }
-	    else if (((ft == MerFilterAbsent) || (ft == MerFilterAll)) && !bit) {
-	      std::cout << " not found" << std::endl;
-	    }
-	  }
-	  // increment the lowest digit
-	  mer_inc[0]++;
-	  for (int ridx = 0; ridx < _k - 1; ++ridx) {
-	    if (mer_inc[ridx] == rmap.size()) {
-	      // reset digit and increment next digit
-	      mer_inc[ridx] = 0;
-	      mer_inc[ridx + 1]++;
-	    }
-	  }
-	}
+	      for (int bidx = 0; bidx < _max_bits; ++bidx) {
+          bool bit = (bits >> bidx) & 1U;
+          // print mer
+          if (((ft == MerFilterPresent) && bit) || ((ft == MerFilterAbsent) && !bit) || (ft == MerFilterAll)) {
+            for (std::vector<size_t>::const_reverse_iterator inc = mer_inc.rbegin(); inc != mer_inc.rend(); ++inc) {
+              std::cout << rmap[*inc];
+            }
+            if (((ft == MerFilterPresent) || (ft == MerFilterAll)) && bit) {
+              std::cout << " found" << std::endl;
+            }
+            else if (((ft == MerFilterAbsent) || (ft == MerFilterAll)) && !bit) {
+              std::cout << " not found" << std::endl;
+            }
+          }
+          // increment the lowest digit
+          mer_inc[0]++;
+          for (int ridx = 0; ridx < _k - 1; ++ridx) {
+            if (mer_inc[ridx] == rmap.size()) {
+              // reset digit and increment next digit
+              mer_inc[ridx] = 0;
+              mer_inc[ridx + 1]++;
+            }
+          }
+        }
       }
     }
 
@@ -155,7 +155,7 @@ namespace kmer_boolean
       binary[8] = '\0';
       int z;
       for (z = 128; z > 0; z >>= 1) {
-	std::strcat(binary, ((byte & z) == z) ? "1" : "0");
+        std::strcat(binary, ((byte & z) == z) ? "1" : "0");
       }
       return binary;
     }

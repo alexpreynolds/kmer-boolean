@@ -19,7 +19,7 @@ main(int argc, char** argv)
   else {
     kb.test_mer();
   }
-    
+
   return EXIT_SUCCESS;
 }
 
@@ -65,7 +65,7 @@ kmer_boolean::KB::process_sequences(void)
       window.push_back((*seq)[i]);
       int idx = 0;
       for (int j = this->k() - 1; j > -1; --j) {
-	idx += bitset().fmap[mer[j]] * 1 << (2*(this->k() - 1 - j));
+        idx += bitset().fmap[mer[j]] * 1 << (2*(this->k() - 1 - j));
       }
       bitset().set(idx, true);
     }
@@ -86,8 +86,8 @@ kmer_boolean::KB::read_sequences(void)
   for (std::string line; std::getline(std::cin, line);) {
     if (line.find(">") == 0) {
       if (!sequence.empty()) {
-	this->sequences.push_back(sequence);
-	sequence = "";
+        this->sequences.push_back(sequence);
+        sequence = "";
       }
     }
     else {
@@ -141,10 +141,10 @@ kmer_boolean::KB::initialize_command_line_options(int argc, char** argv)
 {
   int client_long_index;
   int client_opt = getopt_long(argc,
-			       argv,
-			       this->client_kmer_boolean_opt_string().c_str(),
-			       this->client_kmer_boolean_long_options(),
-			       &client_long_index);
+                               argv,
+                               this->client_kmer_boolean_opt_string().c_str(),
+                               this->client_kmer_boolean_long_options(),
+                               &client_long_index);
   int _k = -1;
 
   opterr = 0; /* disable error reporting by GNU getopt */
@@ -185,10 +185,10 @@ kmer_boolean::KB::initialize_command_line_options(int argc, char** argv)
       break;
     }
     client_opt = getopt_long(argc,
-			     argv,
-			     this->client_kmer_boolean_opt_string().c_str(),
-			     this->client_kmer_boolean_long_options(),
-			     &client_long_index);
+                             argv,
+                             this->client_kmer_boolean_opt_string().c_str(),
+                             this->client_kmer_boolean_long_options(),
+                             &client_long_index);
   }
 
   bool error_flagged = false;
@@ -238,9 +238,9 @@ std::string
 kmer_boolean::KB::client_kmer_boolean_usage(void)
 {
   static std::string _s("\n"						\
-			"  Usage:\n"					\
-			"\n"						\
-			"  $ kmer_boolean [arguments] < input\n");
+                        "  Usage:\n"					\
+                        "\n"						\
+                        "  $ kmer_boolean [arguments] < input\n");
   return _s;
 }
 
@@ -248,9 +248,9 @@ std::string
 kmer_boolean::KB::client_kmer_boolean_description(void)
 {
   static std::string _s("  Test if specified kmer is or is not in a set of\n" \
-			"  FASTA sequences provided on standard input, for a\n" \
-			"  given k, returning the according 'true' or 'false'\n" \
-			"  result.\n");
+                        "  FASTA sequences provided on standard input, for a\n" \
+                        "  given k, returning the according 'true' or 'false'\n" \
+                        "  result.\n");
   return _s;
 }
 
@@ -258,10 +258,10 @@ std::string
 kmer_boolean::KB::client_kmer_boolean_io_options(void)
 {
   static std::string _s("  General Options:\n\n"              \
-			"  --k=n                          K-value for kmer length (integer)\n" \
-			"  --query-kmer=s                 Test or query kmer (string)\n" \
-			" [--present | --absent | --all]  If query kmer is omitted, print all\n" \
-			"                                 present or absent kmers, or all kmers\n");
+                        "  --k=n                          K-value for kmer length (integer)\n" \
+                        "  --query-kmer=s                 Test or query kmer (string)\n" \
+                        " [--present | --absent | --all]  If query kmer is omitted, print all\n" \
+                        "                                 present or absent kmers, or all kmers\n");
   return _s;
 }
 
@@ -269,8 +269,8 @@ std::string
 kmer_boolean::KB::client_kmer_boolean_general_options(void)
 {
   static std::string _s("  Process Flags:\n\n"				\
-			"  --help                         Show this usage message\n" \
-			"  --version                      Show binary version\n");
+                        "  --help                         Show this usage message\n" \
+                        "  --version                      Show binary version\n");
   return _s;
 }
 
@@ -278,30 +278,30 @@ void
 kmer_boolean::KB::print_usage(FILE* os)
 {
   std::fprintf(os,
-	       "%s\n"						     \
-	       "  version: %s\n"				     \
-	       "  author:  %s\n"				     \
-	       "%s\n"						     \
-	       "%s\n"						     \
-	       "%s\n"						     \
-	       "%s\n",
-	       this->client_kmer_boolean_name().c_str(),
-	       this->client_kmer_boolean_version().c_str(),
-	       this->client_kmer_boolean_authors().c_str(),
-	       this->client_kmer_boolean_usage().c_str(),
-	       this->client_kmer_boolean_description().c_str(),
-	       this->client_kmer_boolean_io_options().c_str(),
-	       this->client_kmer_boolean_general_options().c_str());
+               "%s\n"						     \
+               "  version: %s\n"				     \
+               "  author:  %s\n"				     \
+               "%s\n"						     \
+               "%s\n"						     \
+               "%s\n"						     \
+               "%s\n",
+               this->client_kmer_boolean_name().c_str(),
+               this->client_kmer_boolean_version().c_str(),
+               this->client_kmer_boolean_authors().c_str(),
+               this->client_kmer_boolean_usage().c_str(),
+               this->client_kmer_boolean_description().c_str(),
+               this->client_kmer_boolean_io_options().c_str(),
+               this->client_kmer_boolean_general_options().c_str());
 }
 
 void
 kmer_boolean::KB::print_version(FILE* os)
 {
   std::fprintf(os,
-	       "%s\n"						     \
-	       "  version: %s\n"				     \
-	       "  author:  %s\n",
-	       this->client_kmer_boolean_name().c_str(),
-	       this->client_kmer_boolean_version().c_str(),
-	       this->client_kmer_boolean_authors().c_str());
+               "%s\n"						     \
+               "  version: %s\n"				     \
+               "  author:  %s\n",
+               this->client_kmer_boolean_name().c_str(),
+               this->client_kmer_boolean_version().c_str(),
+               this->client_kmer_boolean_authors().c_str());
 }
