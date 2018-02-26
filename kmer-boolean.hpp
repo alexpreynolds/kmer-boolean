@@ -18,6 +18,7 @@ extern "C" {
 #include <deque>
 #include <set>
 #include <stdexcept>
+#include <algorithm>
 #include <exception>
 #include <getopt.h>
 #include <iostream>

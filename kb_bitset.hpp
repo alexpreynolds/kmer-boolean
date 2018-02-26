@@ -5,6 +5,7 @@
 #include <exception>
 #include <stdexcept>
 #include <map>
+#include <cstring>
 
 namespace kmer_boolean
 {
