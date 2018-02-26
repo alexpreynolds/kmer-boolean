@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <map>
 #include <cstring>
+#include <climits>
 
 namespace kmer_boolean
 {
@@ -23,7 +24,7 @@ namespace kmer_boolean
       int o = 0;
       int m = idx;
       while (m > 0) {
-        m -= 8;
+        m -= CHAR_BIT;
         if (m >= 0) {
           o++;
         }
