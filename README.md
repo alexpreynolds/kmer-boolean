@@ -25,7 +25,7 @@ kmer-boolean
 
   Usage:
 
-  $ kmer_boolean [arguments] < input
+  $ kmer-boolean [arguments] < input
 
   Test if specified kmer is or is not in a set of
   FASTA sequences provided on standard input, for a
