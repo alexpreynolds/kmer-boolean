@@ -12,7 +12,13 @@ main(int argc, char** argv)
   kb.initialize_command_line_options(argc, argv);
   kb.read_sequences();
   kb.initialize_bitset();
-  kb.process_sequences();
+  try {
+    kb.process_sequences();
+  }
+  catch (const std::invalid_argument& ia) {
+    std::cerr << ia.what() << std::endl;
+    return EXIT_FAILURE;
+  }
   if (kb.query_kmer().empty()) {
     kb.get_mers_with_state();
   }
@@ -58,6 +64,11 @@ void
 kmer_boolean::KB::process_sequences(void)
 {
   for (std::vector<std::string>::const_iterator seq = this->sequences.begin(); seq != this->sequences.end(); ++seq) {
+    if ((*seq).length() < (unsigned long)this->k()) {
+      std::ostringstream err;
+      err << "Error: k (" << this->k() << ") is longer than the input sequence length (" << (*seq).length() << ")";
+      throw std::invalid_argument(err.str());
+    }
     std::deque<unsigned char> window((*seq).begin(), (*seq).begin() + this->k());
     for (size_t i = this->k(); i <= (*seq).length(); ++i) {
       std::string mer(window.begin(), window.end());
