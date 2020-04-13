@@ -30,6 +30,7 @@
 *.exe
 *.out
 *.app
+kmer-boolean
 
 # Test
 test/*.obs
