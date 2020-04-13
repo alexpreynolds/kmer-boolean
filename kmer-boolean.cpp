@@ -10,9 +10,9 @@ main(int argc, char** argv)
   kmer_boolean::KB kb;
 
   kb.initialize_command_line_options(argc, argv);
-  //kb.read_sequences();
+  kb.read_sequences();
   kb.initialize_bitset();
-  //kb.process_sequences();
+  kb.process_sequences();
   if (kb.query_kmer().empty()) {
     kb.get_mers_with_state();
   }
