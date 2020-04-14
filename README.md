@@ -1,16 +1,30 @@
 # kmer-boolean
 
-This utility tests if a specified kmer is or is not in a set of FASTA sequences provided on standard input, for a given *k*, returning the according "true" or "false" result. Alternatively, the binary will return all kmers and whether they are found or not found. Internally, this test keeps an array of bits to minimize the memory overhead of storing per-kmer presence or absence state.
+This utility tests if a specified kmer is or is not in a set of FASTA sequences provided on standard input, for a given *k*, returning the according "true" or "false" result. Alternatively, the binary will return all kmers and whether they are found or not found. 
+
+## Memory usage
+
+Internally, this test keeps an array of bits to minimize the memory overhead of storing per-kmer presence or absence state. This requires at least 2<sup>2k-3</sup> bytes to store said bitarray. Querying 16mers, for example, will require 537 MB of memory.
+
+For the C++ binary, an additional 8 MB buffer is reserved for storing intermediate sequence data that streams in from the input FASTA file. If the `--read-in-all-at-once` option is used, the sequence data is read into memory all at once. It is recommended to use streaming to minimize memory usage and runtime.
+
+## Notes regarding FASTA input
+
+Note that searches are not performed on "canonical" DNA kmers, but on all unique kmers. For example, a search for the `AG` 2mer will be treated separately from the reverse complement `CT` 2mer.
+
+The input FASTA file may contain one or more records (so-called "multi-FASTA"). Each FASTA record in a multi-FASTA file is scanned separately, but each record contributes to the overall kmer query report. Split a multi-FASTA file if you want to query kmer distributions for individual records.
+
+Hard-masked bases (`N`) are ignored for purposes of kmer querying. Soft-masked bases (lowercase bases) are included in queries.
+
+An 8 MB buffer is kept of sequence data streaming in from the input FASTA. It is also possible to use the `--read-in-all-at-once` option to read the entire FASTA records into memory. Using this option would not be recommended for whole-genome input files.
 
 ## C++
 
 This C++ implementation includes a custom bitset container which can be sized at runtime. The STL `bitset` library can only be sized at compile time and thus cannot be used here.
 
-Note that searches are performed not on "canonical" DNA kmers, but all unique kmers. In other words, for example, a search for the `AG` 2mer will be treated separately from the reverse complement `CT` 2mer.
-
 ### Compilation
 
-Run `make kmer-boolean` to build the `kmer-boolean` binary. Run `make clean` to clean up temporary files.
+Run `make` to build the `kmer-boolean` binary. Run `make clean` to clean up temporary files.
 
 ### Usage
 
@@ -20,7 +34,7 @@ Run `kmer-boolean --help` to get a listing of options:
 
 ```
 kmer-boolean
-  version: 1.0
+  version: 1.1
   author:  Alex Reynolds
 
   Usage:
@@ -38,7 +52,11 @@ kmer-boolean
   --query-kmer=s                 Test or query kmer (string)
  [--present | --absent | --all]  If query kmer is omitted, print all
                                  present or absent kmers, or all kmers
-
+  --read-in-all-at-once          Read all sequence data into memory
+                                 before processing (not recommended for
+                                 very large FASTA inputs; default is to
+                                 stream through input in chunks)
+                                 
   Process Flags:
 
   --help                         Show this usage message
