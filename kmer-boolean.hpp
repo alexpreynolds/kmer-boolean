@@ -26,6 +26,8 @@ extern "C" {
 #include "kb_bitset.hpp"
 
 #define KMER_BOOLEAN_LINE_MAX 268435456
+#define KMER_BOOLEAN_STDIN_BUF_MAX 8192
+#define KMER_BOOLEAN_SEQ_BUF_MAX KMER_BOOLEAN_STDIN_BUF_MAX*1024
 
 namespace kmer_boolean
 {
@@ -33,6 +35,7 @@ namespace kmer_boolean
   {
   private:
     int _k;
+    bool _read_in_all_sequences_at_once;
     std::string _query_kmer;
     KB_Bitset _bitset;
     KB_Bitset::MerFilterType _filter_type;
@@ -44,10 +47,12 @@ namespace kmer_boolean
     static const std::string client_version;
     static const std::string client_authors;
     
-    void read_sequences(void);
+    void process_sequences_by_chunks(void);
+    void process_sequence_chunk_buffer(std::vector<char>& _seq_chunk_buf_vec, std::streamsize& _seq_chunk_nchars);
+    void read_all_sequences(void);
     void write_sequences(void);
     void initialize_bitset(void);
-    void process_sequences(void);
+    void process_all_sequences(void);
     void get_mers_with_state(void);
     void test_mer(void);
 
@@ -67,6 +72,9 @@ namespace kmer_boolean
 
     int k() const { return _k; }
     void k(const int& k) { _k = k; }
+    
+    bool read_in_all_sequences_at_once() const { return _read_in_all_sequences_at_once; }
+    void read_in_all_sequences_at_once(const bool& r) { _read_in_all_sequences_at_once = r; }
 
     std::string query_kmer() const { return _query_kmer; }
     void query_kmer(const std::string& qk) { _query_kmer = qk; }

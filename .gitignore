@@ -34,3 +34,4 @@ kmer-boolean
 
 # Test
 test/*.obs
+test/hg38.fa
