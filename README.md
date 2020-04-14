@@ -2,11 +2,21 @@
 
 This utility tests if a specified kmer is or is not in a set of FASTA sequences provided on standard input, for a given *k*, returning the according "true" or "false" result. Alternatively, the binary will return all kmers and whether they are found or not found. 
 
-## Memory usage
+## Memory usage and runtime
 
 Internally, this test keeps an array of bits to minimize the memory overhead of storing per-kmer presence or absence state. This requires at least 2<sup>2k-3</sup> bytes to store said bitarray. Querying 16mers, for example, will require 537 MB of memory.
 
-For the C++ binary, an additional 8 MB buffer is reserved for storing intermediate sequence data that streams in from the input FASTA file. If the `--read-in-all-at-once` option is used, the sequence data is read into memory all at once. It is recommended to use streaming to minimize memory usage and runtime.
+For the C++ binary, an additional 8 MB buffer is reserved for storing intermediate sequence data that streams in from the input FASTA file. If the `--read-in-all-at-once` option is used, the sequence data is read into memory all at once. It is recommended to use the default streaming option to minimize memory usage and runtime.
+
+As a demonstration of runtime, we can use the `hg38` assembly data from UCSC as a starting point, looking for kmers not found in this genome build from k=2 upwards, to get a general trend:
+
+```
+$ wget -qO- https://hgdownload.cse.ucsc.edu/goldenpath/hg38/bigZips/hg38.fa.gz > /tmp/hg38.fa.gz
+$ time ./kmer-counter --absent --k=2 <(gunzip -c /tmp/hg38.fa.gz) 2>/dev/null
+...
+```
+
+
 
 ## Notes regarding FASTA input
 
