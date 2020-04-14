@@ -390,7 +390,7 @@ std::string
 kmer_boolean::KB::client_kmer_boolean_usage(void)
 {
   static std::string _s("\n"						\
-                        "  Usage:\n"					\
+                        "  Usage:\n"		\
                         "\n"						\
                         "  $ kmer_boolean [arguments] < input\n");
   return _s;
