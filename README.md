@@ -1,22 +1,24 @@
 # kmer-boolean
 
-This utility tests if a specified kmer is or is not in a set of FASTA sequences provided on standard input, for a given *k*, returning the according "true" or "false" result. Alternatively, the binary will return all kmers and whether they are found or not found. 
+This utility tests if a specified kmer is or is not in a set of FASTA sequences provided on standard input, for a given *k*, returning the according "true" or "false" result. Alternatively, the binary can instead report kmers that are found (`--present`) or not found (`--absent`), or either case (`--all`).
 
-## Memory usage and runtime
+## Memory usage
 
-Internally, this test keeps an array of bits to minimize the memory overhead of storing per-kmer presence or absence state. This requires at least 2<sup>2k-3</sup> bytes to store said bitarray. Querying 16mers, for example, will require 537 MB of memory.
+Internally, this test keeps an array of bits to minimize the memory overhead of storing per-kmer presence or absence state. This requires at least 2<sup>2k-3</sup> bytes to store the bitarray. Querying 16mers, for example, will require 537 MB of memory.
 
-For the C++ binary, an additional 8 MB buffer is reserved for storing intermediate sequence data that streams in from the input FASTA file. If the `--read-in-all-at-once` option is used, the sequence data is read into memory all at once. It is recommended to use the default streaming option to minimize memory usage and runtime.
+For the C++ binary, an additional 8 MB buffer is reserved for storing intermediate sequence data that streams in from the input FASTA file. If the `--read-in-all-at-once` option is used, the sequence data is read into memory all at once. It is strongly recommended to instead use the default streaming option to minimize memory usage and runtime overhead required to read all sequences into memory.
 
-As a demonstration of runtime, we can use the `hg38` assembly data from UCSC as a starting point, looking for kmers not found in this genome build from k=2 upwards, to get a general trend:
+## Runtime
 
-```
-$ wget -qO- https://hgdownload.cse.ucsc.edu/goldenpath/hg38/bigZips/hg38.fa.gz > /tmp/hg38.fa.gz
-$ time ./kmer-counter --absent --k=2 <(gunzip -c /tmp/hg38.fa.gz) 2>/dev/null
-...
-```
+To explore runtime characteristics, we used `hg38` assembly data, looking for kmers that are absent in this genome build from <em>k</em>=2 up to 12, to get a general sense of how runtimes trend.
 
+This test is naturally parallelized by chromosome, as any kmer absent in one chromosome is absent over all chromosomes, by definition. We include scripts compatible with a Slurm job scheduler for local testing.
 
+While we include scripts to parallelize the generation of runtime data for all k-by-chromosome combinations, plotting uses the maximum runtime among all chromosomes as the natural bound for querying kmers for the given value of *k*.
+
+![graph](https://user-images.githubusercontent.com/33584/79310219-6ca02580-7eb0-11ea-9e5b-bf443aebf51b.png)
+
+Some work is still left to do to optimize data structures used for bitsetting kmers.
 
 ## Notes regarding FASTA input
 
@@ -24,13 +26,13 @@ Note that searches are not performed on "canonical" DNA kmers, but on all unique
 
 The input FASTA file may contain one or more records (so-called "multi-FASTA"). Each FASTA record in a multi-FASTA file is scanned separately, but each record contributes to the overall kmer query report. Split a multi-FASTA file if you want to query kmer distributions for individual records.
 
-Hard-masked bases (`N`) are ignored for purposes of kmer querying. Soft-masked bases (lowercase bases) are included in queries.
+Kmers containing hard-masked bases (`N`) are ignored. Soft-masked bases (lowercase bases) are included in queries.
 
-An 8 MB buffer is kept of sequence data streaming in from the input FASTA. It is also possible to use the `--read-in-all-at-once` option to read the entire FASTA records into memory. Using this option would not be recommended for whole-genome input files.
+An 8 MB buffer is kept of sequence data streaming in from the input FASTA. It is also possible to use the `--read-in-all-at-once` option to read the entire FASTA records into memory. Using this option would not be recommended for genome-scale input files.
 
 ## C++
 
-This C++ implementation includes a custom bitset container which can be sized at runtime. The STL `bitset` library can only be sized at compile time and thus cannot be used here.
+This C++ implementation includes a custom bitset container which can be sized at runtime. The STL `bitset` library can only be sized at compile time and thus is not used here.
 
 ### Compilation
 

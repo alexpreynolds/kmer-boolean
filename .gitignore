@@ -35,3 +35,5 @@ kmer-boolean
 # Test
 test/*.obs
 test/hg38.fa
+test/hg38/results/*.txt
+test/hg38/results/logs/*.log

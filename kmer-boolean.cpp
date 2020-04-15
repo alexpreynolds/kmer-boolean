@@ -139,13 +139,13 @@ kmer_boolean::KB::process_sequence_chunk_buffer(std::vector<char>& _seq_chunk_bu
   if (_seq_chunk_nchars < this->k()) {
     return;
   }
+#ifdef DEBUG_FLAG
   std::string _buf_str;
   std::streamsize _pos = 0;
   for (std::vector<char>::const_iterator i = _seq_chunk_buf_vec.begin(); _pos < _seq_chunk_nchars; ++i) {
     _buf_str += *i;
     ++_pos;
   }
-#ifdef DEBUG_FLAG
   std::fprintf(stderr, " --> scanning [%s] for %dmers\n", _buf_str.c_str(), this->k());
 #endif
   std::deque<char> window(_seq_chunk_buf_vec.begin(), _seq_chunk_buf_vec.begin() + this->k());
