@@ -1,7 +1,7 @@
 #include "kmer-boolean.hpp"
 
 const std::string kmer_boolean::KB::client_name = "kmer-boolean";
-const std::string kmer_boolean::KB::client_version = "1.1";
+const std::string kmer_boolean::KB::client_version = "1.2";
 const std::string kmer_boolean::KB::client_authors = "Alex Reynolds";
 
 int
