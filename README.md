@@ -46,7 +46,7 @@ Run `kmer-boolean --help` to get a listing of options:
 
 ```
 kmer-boolean
-  version: 1.1
+  version: 1.2
   author:  Alex Reynolds
 
   Usage:
