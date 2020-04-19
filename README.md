@@ -6,7 +6,9 @@ This utility tests if a specified kmer is or is not in a set of FASTA sequences 
 
 Internally, this test keeps an array of bits to minimize the memory overhead of storing per-kmer presence or absence state. This requires at least 2<sup>2k-3</sup> bytes to store the bitarray. Querying 16mers, for example, will require 537 MB of memory.
 
-For the C++ binary, an additional 16 MB buffer is reserved for storing intermediate sequence data that streams in from the input FASTA file. If the `--read-in-all-at-once` option is used, the sequence data is read into memory all at once. It is strongly recommended to instead use the default streaming option to minimize memory usage and runtime overhead required to read all sequences into memory.
+For the C++ binary, an additional 16 MB buffer is reserved for storing intermediate sequence data that streams in from the input FASTA file. 
+
+If the `--read-in-all-at-once` option is used, the sequence data is read into memory all at once. It is strongly recommended to instead use the default streaming option to minimize memory usage and runtime overhead required to read all sequences into memory.
 
 ## Runtime
 
