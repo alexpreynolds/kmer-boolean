@@ -90,9 +90,10 @@ namespace kmer_boolean
     inline void 
     set_all(const bool b) 
     {
+      unsigned char ucb = (b) ? 0xff : 0x00;      
       for (int bidx = 0; bidx < _nbytes; ++bidx) {
-        _bitset[bidx] = (b) ? 0xff : 0x00; 
-      } 
+        _bitset.push_back(ucb);
+      }
     }
 
     void

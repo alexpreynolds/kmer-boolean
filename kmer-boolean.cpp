@@ -151,8 +151,6 @@ kmer_boolean::KB::process_sequence_chunk_buffer(std::vector<char>& _seq_chunk_bu
   std::deque<char> window(_seq_chunk_buf_vec.begin(), _seq_chunk_buf_vec.begin() + this->k());
   for (std::streamsize i = this->k(); i <= _seq_chunk_nchars; ++i) {
     std::string mer(window.begin(), window.end());
-    window.pop_front();
-    window.push_back(_seq_chunk_buf_vec[i]);
 #ifdef DEBUG_FLAG
     std::fprintf(stderr, " ----> bitset [%s]\n", mer.c_str());
 #endif
@@ -161,6 +159,8 @@ kmer_boolean::KB::process_sequence_chunk_buffer(std::vector<char>& _seq_chunk_bu
       idx += bitset().fmap[mer[j]] * 1 << (2*(this->k() - 1 - j));
     }
     bitset().set(idx, true);
+    window.pop_front();
+    window.push_back(_seq_chunk_buf_vec[i]);
   }
 }
 
