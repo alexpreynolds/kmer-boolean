@@ -22,7 +22,7 @@ do
     CHROMOSOME="chr${SUFFIX}"
     echo "${CHROMOSOME} | ${K} | ${KB_FLAG}"
     declare -x IN_FN="${FASTA_DIR}/${CHROMOSOME}.fa"
-    declare -x OUT_FN="${OUTPUT_DIR}/${CHROMOSOME}.${K}.${FLAG}.txt"
+    declare -x OUT_FN="${OUTPUT_DIR}/${CHROMOSOME}.${K}.${KB_FLAG}.txt"
     declare -x SLURM_CMD="${CWD}/slurm.kmer-boolean.sh ${KB_BIN} ${K} ${KB_FLAG} ${IN_FN} ${OUT_FN}"
     sbatch \
       --parsable \
